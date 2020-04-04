@@ -1,0 +1,4 @@
+% visualisation of steepest descent method
+% by Fedor Kobak github.com/Dranikf
+
+[X , Y] = meshGrid
