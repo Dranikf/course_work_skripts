@@ -6,7 +6,7 @@
 % P0 - is a start point
 
 % example in course work
-% stDesMetVis(sym('5*(X^2) - 4 * X* Y + 5*(Y^2) - X - Y') , -2:0.1:2)
+%  stDesMetVis(sym('5*(X^2) - 4 * X* Y + 5*(Y^2) - X - Y') , -1:0.1:1 , [-1 1])
 
 function stDesMetVis(expr , gridVector , P0)
     [X , Y] = meshGrid(gridVector , gridVector);
