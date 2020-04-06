@@ -1,0 +1,17 @@
+% visualisation of steepest descent method
+% by Fedor Kobak github.com/Dranikf
+
+% expr - is function as a sympolic expression 
+% gridVector - is a base vector for grid
+
+function stDesMetVis(expr , gridVector)
+    [X , Y] = meshGrid(gridVector , gridVector);
+    Z = subs(expr , {X, Y});
+    %Z = 5*(X.^2) - 4 * X* Y + 5*(Y.^2) - X - Y;
+
+    surf(X, Y, Z);
+    alpha(0);
+
+    hold on;
+    %plot3(1 ,1 , 2 , 'r.' , 'MarkerSize' , 40);
+end
