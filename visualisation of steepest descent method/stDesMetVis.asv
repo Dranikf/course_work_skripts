@@ -3,15 +3,147 @@
 
 % expr - is function as a sympolic expression 
 % gridVector - is a base vector for grid
+% P0 - is a start point
+% step - step of visualisation of one-dimensional minimisation task
 
-function stDesMetVis(expr , gridVector)
+% example in course work
+%  stDesMetVis(sym('5*(X^2) - 4 * X* Y + 5*(Y^2) - X - Y') , -1:0.1:1 , [-1 1] , 0.05)
+
+function stDesMetVis(expr , gridVector , P0 , step)
     [X , Y] = meshGrid(gridVector , gridVector);
-    Z = subs(expr , {X, Y});
-    %Z = 5*(X.^2) - 4 * X* Y + 5*(Y.^2) - X - Y;
+    
+    vars = symvar(expr);
+    if(numel(vars) ~= 2)
+        disp('incorrect function');
+        return;
+    end
+    
+    borderMin = min(gridVector) ; borderMax = max(gridVector);
+    
+    if(numel(P0) ~= 2 || min(P0) < borderMin || max(P0) > borderMax)
+        disp('incorrect start point');
+        return;
+    end
+    
+    if(step < 0)
+        disp('incorrect step');
+        return;
+    end
+    
+    Z = subs(expr , {X, Y} , {vars(1) , vars(2)});
 
+    subplot(1 ,2 , 1);
+    
     surf(X, Y, Z);
+    title('a)');
     alpha(0);
+    
 
     hold on;
-    %plot3(1 ,1 , 2 , 'r.' , 'MarkerSize' , 40);
+    plot3(P0(1), P0(2) , subs(expr , {vars(1) , vars(2)} , P0) , 'r.' , 'MarkerSize' , 40);
+    
+    
+    subplot(1 ,2 , 2);
+    title('á)')
+    hold on;
+    contour(X, Y , Z , [subs(expr , {vars(1) , vars(2)} , P0) subs(expr , {vars(1) , vars(2)} , P0)] );
+    plot(P0(1), P0(2) , 'r.' , 'MarkerSize' , 40);
+    subplot(1 ,2 , 1);
+    
+    
+    grad = KFGrad(expr)
+    direction = normaliseVec(subs(grad ,  {vars(1) , vars(2)}  , {P0(1), P0(2)}));
+    
+    currPoint = P0;
+    lx = P0(1);ly = P0(2);
+    lz = [subs(expr , {vars(1) , vars(2)} , {P0(1) , P0(2)})];
+    
+    minLPoint = [lx , ly , lz ];
+    
+    while(true)
+        currPoint = currPoint + step*direction;
+        if(min(currPoint) < borderMin || max(currPoint) > borderMax)
+            break;
+        end
+        
+        lx = [currPoint(1), lx];
+        ly = [currPoint(2), ly];
+        currZ = subs(expr , {vars(1) , vars(2)} , {currPoint(1) , currPoint(2)});
+        lz = [currZ , lz ];
+        
+        if(minLPoint(3) > currZ)
+            
+            minLPoint = [currPoint , currZ];
+            
+        end
+    end
+    
+    currPoint = P0;
+    
+    while(true)
+        currPoint = currPoint - step*direction;
+        if(min(currPoint) < borderMin || max(currPoint) > borderMax)
+            break;
+        end
+        
+        lx = [currPoint(1), lx];
+        ly = [currPoint(2), ly];
+        currZ = subs(expr , {vars(1) , vars(2)} , {currPoint(1) , currPoint(2)});
+        lz = [currZ , lz ];
+        
+        if(minLPoint(3) > currZ)
+            
+            minLPoint = [currPoint , currZ];
+            
+        end
+    end
+    
+    plot3(lx, ly , lz , 'r' , 'LineWidth' , 5);
+    plot3(minLPoint(1), minLPoint(2) , minLPoint(3) , 'b.' , 'MarkerSize' , 40);
+    
+    subplot(1 ,2 , 2);
+    plot(lx, ly , 'r' , 'LineWidth' , 2);
+    plot(minLPoint(1), minLPoint(2) , 'b.' , 'MarkerSize' , 40);
+    contour(X, Y , Z , [minLPoint(3) minLPoint(3)] );
+    subplot(1 ,2 , 1);
+    
+    
+    direction = normaliseVec(subs(grad ,  {vars(1) , vars(2)}  , {minLPoint(1), minLPoint(2)}));
+    currPoint = minLPoint([1 2]);
+    
+    lx = minLPoint(1);ly = minLPoint(2);lz = minLPoint(3);
+    
+    while(true)
+        currPoint = currPoint + step*direction;
+        if(min(currPoint) < borderMin || max(currPoint) > borderMax)
+            break;
+        end
+        
+        lx = [currPoint(1), lx];
+        ly = [currPoint(2), ly];
+        currZ = subs(expr , {vars(1) , vars(2)} , {currPoint(1) , currPoint(2)});
+        lz = [currZ , lz ];
+    end
+    
+    currPoint = minLPoint([1 2]);
+    
+    while(true)
+        currPoint = currPoint - step*direction;
+        if(min(currPoint) < borderMin || max(currPoint) > borderMax)
+            break;
+        end
+        
+        lx = [currPoint(1), lx];
+        ly = [currPoint(2), ly];
+        currZ = subs(expr , {vars(1) , vars(2)} , {currPoint(1) , currPoint(2)});
+        lz = [currZ , lz ];
+        
+    end
+    
+    plot3(lx, ly , lz , 'b' , 'LineWidth' , 5);
+    
+    subplot(1 ,2 , 2);
+    plot(lx, ly , 'b' , 'LineWidth' , 2);
+    subplot(1 ,2 , 1);
+    
 end
