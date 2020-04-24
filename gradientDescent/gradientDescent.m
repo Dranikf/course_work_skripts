@@ -18,7 +18,7 @@ function [point , val] = gradientDescent(x , expr , step , eps)
 
 	while(true)
 			
-		gi = subs(grad, vars ,  x);%grad at xi
+		gi = subs(grad, vars ,  x);%grad at x
 		if(eps > get1Norm(gi))
 			val = subs(expr, vars,  x);
             point = x;
