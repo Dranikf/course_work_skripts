@@ -1,0 +1,72 @@
+%function for visualivation of steepest descent method
+% but solution of one-dimensional minimization problem 
+% builded analytically 
+% at first step its compute and save output
+% at second it draw visualisation by getted output
+% by Fedor Kobak github.com/Dranikf
+
+% expr is a symbolic expression which is function
+% eps describes accuracy
+% sPoint - is a start point
+
+function stDesMetodAnVis(expr , eps, sPoint)
+    
+    %initiatisation+++++++++++++++++++++++++++++++++++++++++++++++
+    vars = symvar(expr);
+    if(numel(vars) ~= 2)
+        disp('incorrect function');
+        return;
+    end
+    
+    sx = sPoint(1); sy = sPoint(2); sz = subs(expr, {vars(1) , vars(2)} , {sPoint(1), sPoint(2)}); % here will be bata for visualisation
+    
+    %initiatisation+++++++++++++++++++++++++++++++++++++++++++++++
+
+    pathLength = 1; % its a number of points, getted now
+
+    %+++++++++++++++++++++++++first step++++++++++++++++++++++++++
+    % buiding of solution and saving output
+    while(true)
+        
+        grad = KFGrad(expr);
+        gradXk = subs(grad ,  {vars(1) , vars(2)}  , {sx(pathLength), sy(pathLength)});
+        if(get1Norm(gradXk) < eps)
+            break;
+        end
+        
+        disp('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        
+        pathLength = numel(sx);
+        sz(pathLength)
+        mP = getMinByDirAn(expr , gradXk , [sx(pathLength) sy(pathLength)]);
+        [nx ny] = buildLine([sx(pathLength) sy(pathLength)] , mP, eps);
+        nz = subs(nx, ny, expr);
+        %sx = [sx , nx]; sy = [sy , ny]; sz = [sz, nz];
+        
+    end
+    %+++++++++++++++++++++++++first step++++++++++++++++++++++++++
+
+    minX = sx(pathLength);
+    minY = sy(pathLength);
+    minZ = sz(pathLength);
+    
+    distX = abs(minX - sPoint(1));
+    distY = abs(minY - sPoint(2));
+    
+    %second step - building of a plot+++++++++++++++++++++++++++++
+    
+    [X,Y] = meshgrid(-distX:0.1:distX , -distY:0.1:distY);
+    Z = subs(expr , {vars(1) , vars(2)} , {X , Y});
+    
+    subplot(1 ,2 , 1);
+    surf(X, Y, Z);
+    alpha(0);
+    hold on;
+    plot3(sx, sy , sz , 'LineWidth' , 3);
+    
+    subplot(1 ,2 , 2);
+    plot(sx, sy);
+    
+    %second step - building of a plot+++++++++++++++++++++++++++++
+
+end

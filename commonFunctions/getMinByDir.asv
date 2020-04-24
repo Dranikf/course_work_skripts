@@ -1,0 +1,39 @@
+% function for minimising by direction, whith step crushing
+% by Fedor Kobak gitnub.com/Dranikf
+
+% expr sympolic expression
+% direction for mim\nimizing
+% eps - accuracy
+% sStep - start step of mooving
+% sPoint - start point
+% sx , sy , sz - point of the path, INCLUDING sPoint
+
+function [sx , sy , sz] = getMinByDir(expr , dir , eps , sStep , sPoint)
+
+    dir = normaliseVec(dir);
+    nx = sPoint(0);
+    ny = sPoint(1); 
+    
+    step = sStep;
+    
+    while(true)
+            
+         pathLength = numel(sx);
+         nx = sx(pathLength) - step*dir(1);
+         ny = sy(pathLength) - step*dir(2);
+         nz = subs(expr, {vars(1) , vars(2)} , {nx, ny});
+            
+         if(nz > sz(pathLength))
+             step = step/2;
+             continue;
+         end
+            
+         sx = [sx , nx]; sy = [sy , ny]; sz = [sz, nz];
+         
+         if()
+         
+
+     end
+    
+
+end
