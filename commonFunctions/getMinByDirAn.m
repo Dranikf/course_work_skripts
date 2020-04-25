@@ -5,7 +5,7 @@
 % dir - is a direction for minimisation
 % sPoint - is a start point
 
-function mPoint = getMinByDirAn(expr, dir , sPoint)
+function aFMin = getMinByDirAn(expr, dir , sPoint)
 
     syms a;
     vars = symvar(expr);
@@ -16,8 +16,7 @@ function mPoint = getMinByDirAn(expr, dir , sPoint)
     
     f = diff(f);
     
-    aFMin = solve(f);
-    
-    mPoint = double(sPoint - aFMin*dir);
+    aFMin = double(solve(f));
+   
 end
 
