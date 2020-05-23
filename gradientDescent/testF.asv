@@ -1,0 +1,36 @@
+
+
+
+
+epsils = [0.1 0.01 0.001];
+points = [17 25; 14 3];
+steps = [100 5 1 0.1];
+
+posintsSize = size(points);
+
+
+for(ep = epsils)
+    for(poi = posintsSize(1))
+        for(step = steps)
+            disp('++++++++++++++++++++++++')
+            ep
+            step
+            points(poi , :)
+            disp('++++++++++++++++++++++');
+            pa = 0;
+            sumT = 0;
+            tic;
+            for(i = 1:20)
+                f = sym('-3*x - 5*y + 0.125*(x^2) + 0.5*(y^2)');
+                [p, v ,counter] = gradientDescentTests(poi() ,f , step, ep)
+                a = toc;
+                sumT = sumT + (a - pa);
+                pa = a;
+            end
+             
+             aV = sumT/20
+            
+        end
+    end
+end
+

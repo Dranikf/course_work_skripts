@@ -14,12 +14,11 @@ function aFMin = getMinByDirAn(expr, dir , sPoint)
     
     f = subs(expr , vars , f);
     
-    df = diff(f);
+    f = diff(f);
     
-    critical = double(solve(df));
-    val = subs(f , critical);
-    [m , i] = min(val);
-    aFMin = critical(i);
+    aFMin = double(solve(f));
+    val = subs(expr , aFMin);
+    [m , i] = min(v)
    
 end
 

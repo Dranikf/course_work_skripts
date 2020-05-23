@@ -1,0 +1,24 @@
+f = sym('-3*x - 5*y + 0.125*(x^2) + 0.5*(y^2)');
+
+[X , Y] = meshgrid(-5:0.5:20, -5:0.5:25);
+
+subplot(1 , 2 ,1);
+Z = subs(f , {'x' 'y'} , {X Y});
+surf(X , Y ,Z);
+alpha(0.4);
+
+subplot(1, 2 ,2);
+contour(X , Y ,Z);
+
+[xvis , yvis , zvis] = gradientDescentVis([17 25] , f , 5 , 0.1 , 100);
+hold on
+plot(xvis , yvis ,'r');
+subplot(1 , 2, 1);
+hold on
+plot3(xvis , yvis , zvis ,'r' , 'LineWidth' , 5);
+
+[xvis , yvis , zvis ,c] = conjugateGradientVis([17 25] , f , 0.1 ,1 , 100);
+subplot(1 ,2 , 1);
+plot3(xvis , yvis , zvis , 'LineWidth' , 5);
+subplot(1 , )
+

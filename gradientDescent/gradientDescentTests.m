@@ -1,5 +1,4 @@
 % function realise gradient descent metod for getting minum of function
-% and buildig a visualiasation of way
 % by Fedor Kobak github.com/Dranikf
 
 %input +++++++++++++++++
@@ -12,15 +11,10 @@
 % point- point of min
 %val - value in getted point
 
-function [xVis , yVis , zVis] = gradientDescentVis(x , expr , step , eps , stepsCout)
+function [point , val, counter] = gradientDescentTests(x , expr , step , eps)
 
 	grad = KFGrad(expr);%gettig gradient
 	vars = symvar(expr);
-
-	xVis = x(1); % x coords array for visualisation
-	yVis = x(2); % y coords array for visualisation
-	zVis = subs(expr, vars, x); 
-
 	counter = 0;
 
 	while(true)
@@ -29,40 +23,28 @@ function [xVis , yVis , zVis] = gradientDescentVis(x , expr , step , eps , steps
 		if(eps > get1Norm(gi))
 			val = subs(expr, vars,  x);
             point = x;
-			break;
+			%disp(['iterations number' , num2str(counter)])
+			return;
 		end	
 
 		while(true) 
 			dir = normaliseVec(gi);% direciton of motion
 			nx = x - dir*step;
-            
 
-            counter = counter + 1;
-			if(counter >= stepsCout)
-				return;
-            end
-            
 			% is it any sens to make step smaller?
 			if(subs(expr, vars , x) > subs(expr, vars , nx))
 				%no it isnt
 				x = nx;
-				xVis = [xVis , x(1)];
-				yVis = [yVis , x(2)];
-				zVis = [zVis , subs(expr, vars, x)];
 				break;
-            end
-            
-
+			end
 			% yes it is
 			step = step / 2;
-            
-			break;
 
 		end	
+		counter = counter + 1;
 		subs(expr , vars , x)
 
 	end
-
-	%gradPathVisualisation(expr , xVis , yVis, zVis , 4);	
+	
 
 end

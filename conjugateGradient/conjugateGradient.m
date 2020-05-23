@@ -43,7 +43,7 @@ function [point, val] = conjugateGradient(wx, expr , eps, type)
 
 
 		a = getMinByDirAn(expr , dir , wx);
-		wx = wx - dir * a
+		wx = wx - dir * a(1)
 
 	end
 

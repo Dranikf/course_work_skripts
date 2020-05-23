@@ -1,0 +1,27 @@
+f = sym('(0.5*x^2) + (y^2)');
+[X Y] = meshgrid(-5:0.1:5);
+Z = subs(f , {'x' 'y'} , {X , Y})
+[xVis , yVis , zVis ,c] = conjugateGradientVis([4.5 4.5] , f , 0.001 , 1, 3)
+
+grad = KFGrad(f);
+gi = subs(grad, {'x' 'y'} , {4.5 4.5})%grad at x
+
+sv= [4.5 4.5];
+while(sv(1) < 5 || sv(2) < 5)
+    sv = sv - gi 
+end
+
+subplot(1 , 2 , 1);
+view([-10 -5 10])
+surf(X ,Y ,Z);
+alpha(0.4)
+hold on;
+% plot3(4.5 , 4.5 , subs(f , {'x' 'y'} , {4.5 , 4.5}) , '.' , 'MarkerSize'  , 40)
+% plot3(xVis , yVis , zVis , 'r' , 'LineWidth'  , 20)
+
+
+subplot(1 , 2 , 2);
+contour(X , Y, Z, c);
+% hold on
+% plot(4.5 , 4.5 , '.' , 'MarkerSize'  , 40);
+% plot(xVis , yVis , 'r' , 'LineWidth'  , 20);
