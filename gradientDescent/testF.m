@@ -20,7 +20,7 @@ for(ep = epsils)
                 f = sym('-3*x - 5*y + 0.125*(x^2) + 0.5*(y^2)');
                 [p, v ,counter] = gradientDescentTests(points(poi , :) ,f , step, ep)
                 clc
-                a = toc;
+%                 a = toc;
                 sumT = sumT + (a - pa);
                 pa = a;
             end
